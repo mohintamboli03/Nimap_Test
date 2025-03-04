@@ -2,11 +2,26 @@
 import { useState, useEffect } from "react";
 import { getProducts, updateProduct, deleteProduct } from "../actions";
 
+// Define Product type to ensure TypeScript correctness
+type Product = {
+  id: number;
+  name: string;
+  categoryId: number;
+  category: {
+    id: number;
+    name: string;
+  };
+};
+
 export default function ProductsPage() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
-  const [editData, setEditData] = useState({ id: null, name: "", category: "" });
+  const [editData, setEditData] = useState<{ id: number | null; name: string; category: string }>({
+    id: null,
+    name: "",
+    category: "",
+  });
 
   useEffect(() => {
     async function fetchProducts() {
@@ -19,7 +34,7 @@ export default function ProductsPage() {
 
   const handleDelete = async (id: number) => {
     await deleteProduct(id);
-    setProducts(products.filter((p) => p.id !== id)); // Instant UI update
+    setProducts((prev) => prev.filter((p) => p.id !== id)); // Instant UI update
   };
 
   return (
@@ -28,12 +43,12 @@ export default function ProductsPage() {
 
       <table className="w-full mt-4 border">
         <thead>
-          <tr className="bg-black-200">
-            <th>Product ID</th>
-            <th>Product Name</th>
-            <th>Category Name</th>
-            <th>Category ID</th>
-            <th>Actions</th>
+          <tr className="bg-gray-200">
+            <th className="p-2">Product ID</th>
+            <th className="p-2">Product Name</th>
+            <th className="p-2">Category Name</th>
+            <th className="p-2">Category ID</th>
+            <th className="p-2">Actions</th>
           </tr>
         </thead>
         <tbody className="text-center">
@@ -95,10 +110,18 @@ export default function ProductsPage() {
       </table>
 
       <div className="mt-4 flex justify-between">
-        <button onClick={() => setPage(page - 1)} disabled={page === 1}>
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="p-2 bg-gray-500 text-white rounded disabled:opacity-50"
+        >
           Previous
         </button>
-        <button onClick={() => setPage(page + 1)} disabled={page * 10 >= totalProducts}>
+        <button
+          onClick={() => setPage((prev) => (prev * 10 < totalProducts ? prev + 1 : prev))}
+          disabled={page * 10 >= totalProducts}
+          className="p-2 bg-gray-500 text-white rounded disabled:opacity-50"
+        >
           Next
         </button>
       </div>
