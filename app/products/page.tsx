@@ -37,6 +37,20 @@ export default function ProductsPage() {
     setProducts((prev) => prev.filter((p) => p.id !== id)); // Instant UI update
   };
 
+  const handleUpdate = async (id: number) => {
+    if (!editData.id) return;
+    await updateProduct(id, editData.name, editData.category);
+
+    // 🔥 **Update state immediately after editing**
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.id === id ? { ...p, name: editData.name, category: { ...p.category, name: editData.category } } : p
+      )
+    );
+
+    setEditData({ id: null, name: "", category: "" });
+  };
+
   return (
     <main className="p-6">
       <h1 className="text-2xl font-bold">Product List</h1>
@@ -81,10 +95,7 @@ export default function ProductsPage() {
               <td className="p-2">
                 {editData.id === p.id ? (
                   <button
-                    onClick={async () => {
-                      await updateProduct(p.id, editData.name, editData.category);
-                      setEditData({ id: null, name: "", category: "" });
-                    }}
+                    onClick={() => handleUpdate(p.id)}
                     className="p-1 bg-blue-500 text-white rounded"
                   >
                     Save
@@ -128,3 +139,4 @@ export default function ProductsPage() {
     </main>
   );
 }
+
