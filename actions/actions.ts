@@ -1,5 +1,6 @@
 "use server";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
+
 
 // 👉 Create Category
 export async function createCategory(name: string) {
