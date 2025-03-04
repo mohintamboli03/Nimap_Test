@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { addProduct } from "./actions";
+import Link from "next/link";
 
 export default function Home() {
   const [category, setCategory] = useState("");
@@ -38,6 +39,11 @@ export default function Home() {
         >
           Add Product
         </button>
+
+        <button className="p-2 bg-green-500 text-white rounded m-10">
+          <Link href={"/products"}>View All Products</Link>
+        </button>
+        
       </div>
     </main>
   );
