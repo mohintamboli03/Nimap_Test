@@ -57,7 +57,7 @@ export default function ProductsPage() {
 
       <table className="w-full mt-4 border">
         <thead>
-          <tr className="bg-gray-200">
+          <tr className="bg-black-200">
             <th className="p-2">Product ID</th>
             <th className="p-2">Product Name</th>
             <th className="p-2">Category Name</th>
